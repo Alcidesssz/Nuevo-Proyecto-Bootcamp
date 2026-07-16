@@ -1,4 +1,4 @@
-
+const Turno = require('../models/Turno');
 
 let turnos = [
     {id: 1, Paciente: 'Juan Perez', DNI: '12345678', Especialidad: 'Cardiología'},
@@ -22,22 +22,17 @@ const getTurnos = (req, res) => {
     respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
 };
 
-const createTurno = (req, res) => {
-    const { Paciente, DNI, Especialidad } = req.body;
-
-    if (!Paciente || !DNI || !Especialidad) {
-        return respuestaEstandar(res, 400, false, 'Faltan datos requeridos');
+const createTurno = async (req, res) => {
+    try {
+        const nuevoTurno = await Turno.create(req.body);
+        return respuestaEstandar(res, 201, true, 'Turno creado exitosamente', nuevoTurno);
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            const errores = Object.values(error.errors).map(err => err.message);
+            return respuestaEstandar(res, 400, false, 'Error de validación', errores);
+        }
+        return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
-
-    const nuevoTurno = {
-        id: turnos.length + 1,
-        Paciente,
-        DNI,
-        Especialidad
-    };
-
-    turnos.push(nuevoTurno);
-    respuestaEstandar(res, 201, true, 'Turno creado exitosamente', nuevoTurno);
 };
 
 const deleteTurno = (req, res) => {
