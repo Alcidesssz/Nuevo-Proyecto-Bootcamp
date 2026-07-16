@@ -1,12 +1,5 @@
 const Turno = require('../models/Turno');
 
-let turnos = [
-    {id: 1, Paciente: 'Juan Perez', DNI: '12345678', Especialidad: 'Cardiología'},
-    {id: 2, Paciente: 'Maria Lopez', DNI: '87654321', Especialidad: 'Dermatología'},
-    {id: 3, Paciente: 'Pedro García', DNI: '11223344', Especialidad: 'Neurología'},
-    {id: 4, Paciente: 'Ana Torres', DNI: '55667788', Especialidad: 'Pediatría'},
-];
-
 const respuestaEstandar = (res, status, success, message, data = null) => {
     res.status(status).json({
         success,
@@ -18,8 +11,13 @@ const respuestaEstandar = (res, status, success, message, data = null) => {
 };
 
 
-const getTurnos = (req, res) => {
-    respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
+const getTurnos = async (req, res) => {
+    try {
+        const turnos = await Turno.find();
+        respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
+    } catch (error) {
+        respuestaEstandar(res, 500, false, 'Error interno del servidor');
+    }
 };
 
 const createTurno = async (req, res) => {
@@ -35,19 +33,20 @@ const createTurno = async (req, res) => {
     }
 };
 
-const deleteTurno = (req, res) => {
-    const { id } = req.params;
-    const turnoExiste = turnos.some(t => t.id === parseInt(id));
-
-    if (!turnoExiste) {
-        return respuestaEstandar(res, 404, false, 'Turno no encontrado');
+const deleteTurno = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const turnoEliminado = await Turno.findByIdAndDelete(id);
+        if (!turnoEliminado) {
+            return respuestaEstandar(res, 404, false, `Turno no encontrado con ID ${id}`);
+        }
+        respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoEliminado);
+    } catch (error) {
+        respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
-    
-    turnos = turnos.filter(t => t.id !== parseInt(id));
-    respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnos);
 };
-    
-const getTurnosPorEspecialidad = (req, res) => {
+
+const getTurnosPorEspecialidad = async (req, res) => {
     const { especialidad } = req.params;
     const turnosFiltrados = turnos.filter(t => t.Especialidad.toLowerCase() === especialidad.toLowerCase());
 
