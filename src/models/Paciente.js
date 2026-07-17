@@ -31,7 +31,8 @@ const pacienteSchema = new mongoose.Schema({
     Direccion: {
         Calle: {
             type: String,
-            required: [true, 'La calle de la dirección del paciente es obligatoria']
+            required: [true, 'La calle de la dirección del paciente es obligatoria'],
+            uppercase: true,
         },
         Numero: {
             type: String,
@@ -73,17 +74,22 @@ const pacienteSchema = new mongoose.Schema({
         ObraSocial: {
             type: String,
             enum: {
-                values: ['OSDE', 'Swiss Medical', 'Galeno', 'Medifé', 'Otro', 'Ninguna'],
+                values: ['OSDE', 'SWISS MEDICAL', 'GALENO', 'MEDIFE','IOSFA', 'OTRO', 'NINGUNA'],
                 message: '{VALUE} no es una obra social válida'
             },
             required: true,
             uppercase: true,
+            set: function(value) {
+                return value
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '');
+            }
         },
         NumeroAfiliado: {
             type: String,
             required: [true, 'El número de afiliado del paciente es obligatorio']
         },
-        GruposSanguineos: {
+        GrupoSanguineo: {
             type: String,
             enum: { 
                 values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 
@@ -101,6 +107,14 @@ const pacienteSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
+});
+
+pacienteSchema.set('toJSON', {
+    transform: (documento, pacienteRetorno) => {
+        pacienteRetorno.id = pacienteRetorno._id;
+        delete pacienteRetorno._id;
+        delete pacienteRetorno.__v;
+    }
 });
 
 module.exports = mongoose.model('Paciente', pacienteSchema);

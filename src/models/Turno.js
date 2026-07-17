@@ -12,13 +12,19 @@ const turnoSchema = new mongoose.Schema({
         match: [/^[0-9]{7,8}$/, 'El DNI debe tener 7 u 8 dígitos'],
     },
     Especialidad: {
-        type: String,
-        required: true,
-        enum: {
-            values: ['Odontología', 'Cardiología', 'Pediatría', 'Dermatología', 'Neurología'],
-            message: '{VALUE} no es una especialidad válida'
-        }
+    type: String,
+    required: true,
+    enum: {
+        values: ['ODONTOLOGIA','CARDIOLOGIA','PEDIATRIA','DERMATOLOGIA','NEUROLOGIA'],
+        message: '{VALUE} no es una especialidad válida'
     },
+    uppercase: true,
+    set: function(value) {
+        return value
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    }
+},
     FechaTurno: {
         type: Date,
         required: [true, 'La fecha del turno es obligatoria'],
