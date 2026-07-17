@@ -48,12 +48,15 @@ const deleteTurno = async (req, res) => {
 
 const getTurnosPorEspecialidad = async (req, res) => {
     const { especialidad } = req.params;
-    const turnosFiltrados = turnos.filter(t => t.Especialidad.toLowerCase() === especialidad.toLowerCase());
-
-    if (turnosFiltrados.length === 0) { 
-        return respuestaEstandar(res, 404, false, `No se encontraron turnos para la especialidad: ${especialidad}`); }
-
-    respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnosFiltrados);
+    try {
+        const turnosFiltrados = await Turno.find({ Especialidad: especialidad });
+        if (turnosFiltrados.length === 0) {
+            return respuestaEstandar(res, 404, false, `No se encontraron turnos para la especialidad: ${especialidad}`);
+        }
+        respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnosFiltrados);
+    } catch (error) {
+        respuestaEstandar(res, 500, false, 'Error interno del servidor');
+    }
 };
 
 module.exports = {
