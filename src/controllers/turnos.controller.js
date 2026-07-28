@@ -1,19 +1,10 @@
 const Turno = require('../models/Turno');
-
-const respuestaEstandar = (res, status, success, message, data = null) => {
-    res.status(status).json({
-        success,
-        timestamp: new Date().toISOString(),
-        message,
-        total: Array.isArray(data) ? data.length : data ? 1 : 0,
-        data
-    });
-};
-
+const respuestaEstandar = require('../utils/respuestaEstandar');
 
 const getTurnos = async (req, res) => {
     try {
-        const turnos = await Turno.find();
+        const turnos = await Turno.find({activo: true}).populate('Paciente');
+
         respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
     } catch (error) {
         respuestaEstandar(res, 500, false, 'Error interno del servidor');
@@ -36,11 +27,18 @@ const createTurno = async (req, res) => {
 const deleteTurno = async (req, res) => {
     try {
         const { id } = req.params;
-        const turnoEliminado = await Turno.findByIdAndDelete(id);
-        if (!turnoEliminado) {
+
+        const turnoBorrado = await Turno.findByIdAndUpdate(
+            id, 
+            { activo: false },
+            {estado: 'Cancelado'},
+            { new: true }
+        );
+
+        if (!turnoBorrado) {
             return respuestaEstandar(res, 404, false, `Turno no encontrado con ID ${id}`);
         }
-        respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoEliminado);
+        respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoBorrado);
     } catch (error) {
         respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
@@ -49,7 +47,7 @@ const deleteTurno = async (req, res) => {
 const getTurnosPorEspecialidad = async (req, res) => {
     const { especialidad } = req.params;
     try {
-        const turnosFiltrados = await Turno.find({ Especialidad: especialidad });
+        const turnosFiltrados = await Turno.find({ Especialidad: especialidad, activo: true });
         if (turnosFiltrados.length === 0) {
             return respuestaEstandar(res, 404, false, `No se encontraron turnos para la especialidad: ${especialidad}`);
         }
