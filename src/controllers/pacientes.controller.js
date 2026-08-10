@@ -9,7 +9,9 @@ const getPacientes = async (req, res) => {
 
         const filtro = {};
 
-
+        if (ObraSocial) {
+            filtro['ObraSocial.nombre'] = ObraSocial.toUpperCase();
+        }
 
         if (DNI) {
             filtro.DNI = DNI;
