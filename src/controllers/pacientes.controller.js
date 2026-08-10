@@ -3,7 +3,21 @@ const respuestaEstandar = require('../utils/respuestaEstandar');
 
 const getPacientes = async (req, res) => {
     try {
-        const pacientes = await Paciente.find();
+
+        // ?ObraSocial=OSDE&DNI=12345678
+        const {ObraSocial, DNI} = req.query;
+
+        const filtro = {};
+
+
+
+        if (DNI) {
+            filtro.DNI = DNI;
+        }
+
+        console.log("🟢 Filtro Armado:", filtro);
+
+        const pacientes = await Paciente.find(filtro);
         respuestaEstandar(res, 200, true, 'Pacientes encontrados', pacientes);
     } catch (error) {
         respuestaEstandar(res, 500, false, 'Error al obtener los pacientes', null);

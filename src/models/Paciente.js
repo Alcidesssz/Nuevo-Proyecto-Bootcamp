@@ -73,17 +73,12 @@ const pacienteSchema = new mongoose.Schema({
     HistorialMedico: {
         ObraSocial: {
             type: String,
+            required: true,
+            uppercase: true,
             enum: {
                 values: ['OSDE', 'SWISS MEDICAL', 'GALENO', 'MEDIFE','IOSFA', 'OTRO', 'NINGUNA'],
                 message: '{VALUE} no es una obra social válida'
             },
-            required: true,
-            uppercase: true,
-            set: function(value) {
-                return value
-                    .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '');
-            }
         },
         NumeroAfiliado: {
             type: String,
