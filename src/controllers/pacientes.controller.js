@@ -5,23 +5,37 @@ const getPacientes = async (req, res) => {
     try {
 
         // ?ObraSocial=OSDE&DNI=12345678
-        const {ObraSocial, DNI} = req.query;
+        const { ObraSocial, DNI } = req.query;
 
         const filtro = {};
 
         if (ObraSocial) {
-            filtro['ObraSocial.nombre'] = ObraSocial.toUpperCase();
+            let obraSocial = null;
+
+            if (typeof ObraSocial === 'string') {
+                obraSocial = ObraSocial.trim().toUpperCase();
+            } else if (typeof ObraSocial === 'object') {
+                const obraSocialQuery = ObraSocial.nombre || ObraSocial.name || ObraSocial.ObraSocial;
+                if (typeof obraSocialQuery === 'string') {
+                    obraSocial = obraSocialQuery.trim().toUpperCase();
+                }
+            }
+
+            if (obraSocial) {
+                filtro['HistorialMedico.ObraSocial'] = obraSocial;
+            }
         }
 
         if (DNI) {
-            filtro.DNI = DNI;
+            filtro.DNI = String(DNI).trim();
         }
 
-        console.log("🟢 Filtro Armado:", filtro);
+        console.log('🟢 Filtro Armado:', filtro);
 
         const pacientes = await Paciente.find(filtro);
         respuestaEstandar(res, 200, true, 'Pacientes encontrados', pacientes);
     } catch (error) {
+        console.error('🔴 Error al obtener pacientes:', error);
         respuestaEstandar(res, 500, false, 'Error al obtener los pacientes', null);
     }
 };

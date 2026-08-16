@@ -14,6 +14,7 @@ const especialidadRoutes = require('./src/routes/especialidad.routes');
 const medicoRoutes = require('./src/routes/medico.routes');
 const historiaClinicaRoutes = require('./src/routes/historiaClinica.routes');
 const consultorioRoutes = require('./src/routes/consultorio.routes');
+const recepcionRoutes = require('./src/routes/recepcion.routes');
 
 app.use(express.json());
 app.use(auditMiddleware);
@@ -24,6 +25,7 @@ app.use('/api/v1/especialidades', especialidadRoutes);
 app.use('/api/v1/medicos', medicoRoutes);
 app.use('/api/v1/historias-clinicas', historiaClinicaRoutes);
 app.use('/api/v1/consultorios', consultorioRoutes);
+app.use('/api/v1/recepcion', require('./src/routes/recepcion.routes'));
 
 app.use(errorHandlerMiddleware);
 

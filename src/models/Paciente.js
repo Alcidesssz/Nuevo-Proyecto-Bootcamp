@@ -76,7 +76,7 @@ const pacienteSchema = new mongoose.Schema({
             required: true,
             uppercase: true,
             enum: {
-                values: ['OSDE', 'SWISS MEDICAL', 'GALENO', 'MEDIFE','IOSFA', 'OTRO', 'NINGUNA'],
+                values: ['OSDE', 'SWISS MEDICAL', 'GALENO', 'MEDIFE','OSFA', 'OTRO', 'NINGUNA'],
                 message: '{VALUE} no es una obra social válida'
             },
         },
