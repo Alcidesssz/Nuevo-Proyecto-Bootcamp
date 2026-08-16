@@ -22,7 +22,7 @@ const getPacientes = async (req, res) => {
             }
 
             if (obraSocial) {
-                filtro['HistorialMedico.ObraSocial'] = obraSocial;
+                filtro['ObraSocial.Nombre'] = obraSocial;
             }
         }
 
@@ -43,13 +43,41 @@ const getPacientes = async (req, res) => {
 const createPaciente = async (req, res) => {
     try {
         const nuevoPaciente = await Paciente.create(req.body);
-        respuestaEstandar(res, 201, true, 'Paciente creado', nuevoPaciente);
+
+        respuestaEstandar(
+            res,
+            201,
+            true,
+            'Paciente creado',
+            nuevoPaciente
+        );
+
     } catch (error) {
+
+        console.error("❌ ERROR REAL AL CREAR PACIENTE:");
+        console.error(error);
+
         if (error.name === 'ValidationError') {
-            const errores = Object.values(error.errors).map(err => err.message);
-            return respuestaEstandar(res, 400, false, 'Error de validación', errores);
+            const errores = Object.values(error.errors).map(
+                err => err.message
+            );
+
+            return respuestaEstandar(
+                res,
+                400,
+                false,
+                'Error de validación',
+                errores
+            );
         }
-        respuestaEstandar(res, 500, false, 'Error al crear el paciente', null);
+
+        respuestaEstandar(
+            res,
+            500,
+            false,
+            'Error al crear el paciente',
+            null
+        );
     }
 };
 

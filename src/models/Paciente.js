@@ -48,10 +48,11 @@ const pacienteSchema = new mongoose.Schema({
         },
     },
     Telefono: {
-        codPais: {
+        tipo: {
             type: String,
-            required: [true, 'El código de país del teléfono es obligatorio'],
-            match: [/^\+\d{1,3}$/, 'El código de país debe tener el formato +XXX']
+            enum: {
+                values: ['Fijo', 'Celular'],
+            }
         },
         codArea: {
             type: String,
@@ -70,8 +71,8 @@ const pacienteSchema = new mongoose.Schema({
         unique: [true, 'El correo electrónico del paciente debe ser único'],
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'El correo electrónico debe tener un formato válido']
     },
-    HistorialMedico: {
-        ObraSocial: {
+    ObraSocial: {
+        Nombre: {
             type: String,
             required: true,
             uppercase: true,
@@ -82,24 +83,8 @@ const pacienteSchema = new mongoose.Schema({
         },
         NumeroAfiliado: {
             type: String,
-            required: [true, 'El número de afiliado del paciente es obligatorio']
         },
-        GrupoSanguineo: {
-            type: String,
-            enum: { 
-                values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 
-                message: '{VALUE} no es un grupo sanguíneo válido' 
-            }
-        },
-        Alergias: {
-            type: [String],
-            default: []
-        },
-        EnfermedadesPrevias: {
-            type: [String],
-            default: []
-        }
-    }
+    },
 }, {
     timestamps: true
 });
