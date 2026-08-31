@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const HistoriaClinicaSchema = new mongoose.Schema({
-    paciente: {
+    Paciente: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Paciente',
         required: [true, 'El ID del paciente es obligatorio'],
     },
-    medico: {
+    Medico: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Medico',
        
     },
-    fecha: {
+    Fecha: {
         type: Date,
         required: [true, 'La fecha del historia clinica es obligatoria'],
         validate: {
@@ -21,7 +21,7 @@ const HistoriaClinicaSchema = new mongoose.Schema({
             message: 'La fecha del historia clinica debe ser una fecha futura'
         }
     },
-    antecedentes: {
+    Antecedentes: {
         alergias: {
             type: [String],
             default: []
@@ -70,23 +70,23 @@ const HistoriaClinicaSchema = new mongoose.Schema({
            maxlength: 500
         } 
     },
-    motivoConsulta: {
+    MotivoConsulta: {
          type: String,
          required: [true, 'El motivo de la consulta es obligatorio']
     },
-    sintomas: {
+    Sintomas: {
          type: [String],
          default: []
     },
-    diagnostico: {
+    Diagnostico: {
         type: String,
         required: [true, 'El diagnóstico es obligatorio'],
     },
-    tratamiento: {
+    Tratamiento: {
         type: String,
         required: [true, 'El tratamiento es obligatorio'],
     },
-    observaciones: {
+    Observaciones: {
         type: String,
         maxlength: [500, 'Las observaciones no pueden superar los 500 caracteres'],
     },

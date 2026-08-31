@@ -13,10 +13,8 @@ const getTurnos = async (req, res) => {
 
 const createTurno = async (req, res) => {
     try {
-        
-        const nuevoTurno = await Turno.create(req.body);
 
-const origenPeticion = req.headers['x-origen'];
+        const origenPeticion = req.headers['x-origen'];
         const tokenSeguridad = req.headers['authorization'];
 
         console.log("🌎 Peticion realizada desde:", origenPeticion);
@@ -28,9 +26,10 @@ const origenPeticion = req.headers['x-origen'];
         const esUrgente = req.query.urgencia === 'true';
 
         const datosDelTurno = {
-            paciente: req.body.paciente,
-            especialidad: req.body.especialidad,
-            fechaTurno: req.body.fechaTurno
+            Paciente: req.body.Paciente,
+            Especialidad: req.body.Especialidad,
+            FechaTurno: req.body.FechaTurno,
+            Estado: req.body.Estado
         };
 
         if (esUrgente) {
@@ -39,7 +38,7 @@ const origenPeticion = req.headers['x-origen'];
             console.log("🚨 ALERTA: registrado un turno de urgencia");
         }
 
-        const NuevoTurno = await Turno.create(datosDelTurno);
+        const nuevoTurno = await Turno.create(datosDelTurno);
 
         return respuestaEstandar(res, 201, true, 'Turno creado exitosamente', nuevoTurno);
     } catch (error) {
@@ -84,9 +83,27 @@ const getTurnosPorEspecialidad = async (req, res) => {
     }
 };
 
+const marcarAtendido = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const turnoActualizado = await Turno.findByIdAndUpdate(
+            id,
+            { Estado: 'Atendido'},
+            { new: true }
+        );
+
+        if ( !turnoActualizado) return respuestaEstandar(res, 404, false, 'Turno No Encontrado' , id);
+        return respuestaEstandar(res, 200, true, 'Turno Actualizado', turnoActualizado);
+    } catch (error) {
+        return respuestaEstandar(res, 500, false, 'Error de Servidor', error.message);
+    }
+};
+
 module.exports = {
     getTurnos,
     createTurno,
     deleteTurno,
-    getTurnosPorEspecialidad
+    getTurnosPorEspecialidad,
+    marcarAtendido
 };

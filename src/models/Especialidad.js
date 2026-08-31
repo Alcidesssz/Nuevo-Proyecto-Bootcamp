@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const especialidadSchema = new mongoose.Schema({
-  nombre: {
+  Nombre: {
     type: String,
     required: [true, 'El nombre es obligatorio'],
     unique: true,
     trim: true
   },
-  descripcion: {
+  Descripcion: {
     type: String,
     required: [true, 'La descripción es obligatoria']
   },
-  categoria: {
+  Categoria: {
     type: String,
     required: [true, 'La categoría es obligatoria'],
     enum: ['Clínica', 'Quirúrgica', 'Diagnóstico', 'Terapéutica']

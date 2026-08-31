@@ -1,17 +1,17 @@
 const moongose = require('mongoose');
 
 const consultorioSchema = new moongose.Schema({
-    medico: {
+    Medico: {
         type: moongose.Schema.Types.ObjectId,
         ref: 'Medico',
         required: [true, 'El nombre del médico es obligatorio'],
     },
-    especialidad: {
+    Especialidad: {
         type: moongose.Schema.Types.ObjectId,
         ref: 'Especialidad',
         required: [true, 'La especialidad es obligatoria'],
     },
-    horarios: { 
+    Horarios: { 
         dias: {
             type: [String],
             enum: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
@@ -42,22 +42,22 @@ const consultorioSchema = new moongose.Schema({
             },
         },
     },
-    numeroConsultorio: {
+    NumeroConsultorio: {
         type: String,
         required: [true, 'El número de consultorio es obligatorio'],
         match: [/^[0-9]{1,3}$/, 'El número de consultorio no es válido'],
     },
-    direccion: {
+    Direccion: {
         type: String,
         required: [true, 'La dirección es obligatoria'],
     },
-    piso: {
+    Piso: {
         type: String,
         required: [true, 'El piso es obligatorio'],
         match: [/^[0-9]{1,2}$/, 'El piso no es válido'],
     },
-    telefono: {
-        codigoArea: {
+    Telefono: {
+        codArea: {
             type: String,
             required: true,
             match: [/^[0-9]{2,5}$/, 'El código de área no es válido']
@@ -68,7 +68,7 @@ const consultorioSchema = new moongose.Schema({
             match: [/^[0-9]{7,10}$/, 'El número de teléfono no es válido']
         },
     },
-    email: {
+    CorreoElectronico: {
         type: String,
         required: [true, 'El correo electrónico del consultorio es obligatorio'],
         unique: [true, 'El correo electrónico del consultorio debe ser único'],
