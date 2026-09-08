@@ -1,13 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const express = require('express');
+type Application = import('express').Application;
 const cors = require('cors');
-const connectDB = require('./src/config/database').default;
-const app = express();
+const connectDB = require('./src/config/database');
+
+const app: Application = express();
+
 connectDB();
+
 const auditMiddleware = require('./src/middlewares/auditoria.middleware');
 const errorHandlerMiddleware = require('./src/middlewares/errorHandler.middleware');
+
 const turnosRoutes = require('./src/routes/turnos.routes');
 const pacientesRoutes = require('./src/routes/pacientes.routes');
 const especialidadRoutes = require('./src/routes/especialidad.routes');
@@ -15,9 +18,11 @@ const medicoRoutes = require('./src/routes/medico.routes');
 const historiaClinicaRoutes = require('./src/routes/historiaClinica.routes');
 const consultorioRoutes = require('./src/routes/consultorio.routes');
 const recepcionRoutes = require('./src/routes/recepcion.routes');
+
 app.use(cors());
 app.use(express.json());
 app.use(auditMiddleware);
+
 app.use('/api/v1/turnos', turnosRoutes);
 app.use('/api/v1/pacientes', pacientesRoutes);
 app.use('/api/v1/especialidades', especialidadRoutes);
@@ -25,7 +30,9 @@ app.use('/api/v1/medicos', medicoRoutes);
 app.use('/api/v1/historias-clinicas', historiaClinicaRoutes);
 app.use('/api/v1/consultorios', consultorioRoutes);
 app.use('/api/v1/recepcion', recepcionRoutes);
+
 app.use(errorHandlerMiddleware);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`=============================================`);
@@ -34,4 +41,3 @@ app.listen(PORT, () => {
     console.log('Entorno:', process.env.NODE_ENV || 'development');
     console.log(`=============================================`);
 });
-//# sourceMappingURL=app.js.map
