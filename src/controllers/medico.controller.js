@@ -1,11 +1,11 @@
 // src/controllers/medico.controller.js
-const Medico = require('../models/medico.js');
+const Medico = require('../models/Medico.js');
 const respuestaEstandar = require('../utils/respuestaEstandar');
 
 // Controlador para obtener todos los médicos
 const getMedicos = async (req, res) => {
     try {
-        const medicos = await Medico.find({ activo: true }).populate('especialidad');
+        const medicos = await Medico.find({ activo: true }).populate('Especialidad');
         return respuestaEstandar(res, 200, true, 'Médicos obtenidos exitosamente', medicos);
     } catch (error) {
         return respuestaEstandar(res, 500, false, 'Error interno del servidor', error.message);
@@ -39,10 +39,10 @@ const deleteMedico = async (req, res) => {
         );
 
         if (!medicoBorrado) {
-            return respuestaEstandar(res, 404, false, `Medico no encontrado con ID ${id}`);
+            return respuestaEstandar(res, 404, false, `Médico no encontrado con ID ${id}`);
         }
         
-        return respuestaEstandar(res, 200, true, 'Medico eliminado exitosamente', medicoBorrado);
+        return respuestaEstandar(res, 200, true, 'Médico eliminado exitosamente', medicoBorrado);
     } catch (error) {
         console.error('Error al eliminar el Medico:', error);
         return respuestaEstandar(res, 400, false, 'ID con formato invalido', error.message);

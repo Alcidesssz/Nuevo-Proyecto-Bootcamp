@@ -3,11 +3,18 @@ const respuestaEstandar = require('../utils/respuestaEstandar');
 
 const getTurnos = async (req, res) => {
     try {
-        const turnos = await Turno.find({activo: true}).populate('Paciente');
 
-        respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
+        const {id} = req.query;
+
+            if (id) {
+                const turnos  = await Turno.findById(id).populate('Paciente');
+                return respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
+            };
+                const turnos = await Turno.find({activo: true}).populate('Paciente');
+        
+        return respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
     } catch (error) {
-        respuestaEstandar(res, 500, false, 'Error interno del servidor');
+        return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
 };
 
@@ -64,9 +71,9 @@ const deleteTurno = async (req, res) => {
         if (!turnoBorrado) {
             return respuestaEstandar(res, 404, false, `Turno no encontrado con ID ${id}`);
         }
-        respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoBorrado);
+        return respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoBorrado);
     } catch (error) {
-        respuestaEstandar(res, 500, false, 'Error interno del servidor');
+        return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
 };
 
