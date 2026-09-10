@@ -1,10 +1,15 @@
-const Turno = require('../models/Turno');
+import {Request, Response} from 'express';
+import {EstadoTurno} from '../interface/Turnos/TurnoEstado.enum';
+import {ICrearTurnoDTO, IQueryUrgencia} from '../interface/Turnos/request/TurnoDTO';
+
+import Turno from '../models/Turno';
 const respuestaEstandar = require('../utils/respuestaEstandar');
 
-const getTurnos = async (req, res) => {
+const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string }>, res: Response) => {
     try {
 
         const {id} = req.query;
+        //api/v1/turnos?id=89a7fc98fvs7
 
             if (id) {
                 const turnos  = await Turno.findById(id).populate('Paciente');
@@ -13,34 +18,33 @@ const getTurnos = async (req, res) => {
                 const turnos = await Turno.find({activo: true}).populate('Paciente');
         
         return respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
-    } catch (error) {
+    } catch (error: any) {
         return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
 };
 
-const createTurno = async (req, res) => {
+const createTurno = async (req: Request<unknown, unknown, ICrearTurnoDTO, IQueryUrgencia>, res: Response) => {
     try {
 
-        const origenPeticion = req.headers['x-origen'];
+        /*const origenPeticion = req.headers['x-origen'];
         const tokenSeguridad = req.headers['authorization'];
 
         console.log("🌎 Peticion realizada desde:", origenPeticion);
 
         if (tokenSeguridad != 'token123') {
             return respuestaEstandar(res, 401, false, 'no tiene permisos');
-        }
+        } */
 
         const esUrgente = req.query.urgencia === 'true';
 
-        const datosDelTurno = {
+        const datosDelTurno: any = {
             Paciente: req.body.Paciente,
             Especialidad: req.body.Especialidad,
             FechaTurno: req.body.FechaTurno,
-            Estado: req.body.Estado
         };
 
         if (esUrgente) {
-            datosDelTurno.estado = 'atendido';
+            datosDelTurno.estado = EstadoTurno.ATENDIDO;
             datosDelTurno.observaciones = 'ingreso por guardia medica';
             console.log("🚨 ALERTA: registrado un turno de urgencia");
         }
@@ -48,23 +52,22 @@ const createTurno = async (req, res) => {
         const nuevoTurno = await Turno.create(datosDelTurno);
 
         return respuestaEstandar(res, 201, true, 'Turno creado exitosamente', nuevoTurno);
-    } catch (error) {
+    } catch (error: any) {
         if (error.name === 'ValidationError') {
-            const errores = Object.values(error.errors).map(err => err.message);
+            const errores = Object.values(error.errors).map((err: any) => err.message);
             return respuestaEstandar(res, 400, false, 'Error de validación', errores);
         }
         return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
 };
 
-const deleteTurno = async (req, res) => {
+const deleteTurno = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
 
         const turnoBorrado = await Turno.findByIdAndUpdate(
             id, 
-            { activo: false },
-            {estado: 'Cancelado'},
+            { activo: false, estado: EstadoTurno.CANCELADO },
             { new: true }
         );
 
@@ -72,45 +75,31 @@ const deleteTurno = async (req, res) => {
             return respuestaEstandar(res, 404, false, `Turno no encontrado con ID ${id}`);
         }
         return respuestaEstandar(res, 200, true, 'Turno eliminado exitosamente', turnoBorrado);
-    } catch (error) {
+    } catch (error: any) {
         return respuestaEstandar(res, 500, false, 'Error interno del servidor');
     }
 };
 
-const getTurnosPorEspecialidad = async (req, res) => {
-    const { especialidad } = req.params;
-    try {
-        const turnosFiltrados = await Turno.find({ Especialidad: especialidad, activo: true });
-        if (turnosFiltrados.length === 0) {
-            return respuestaEstandar(res, 404, false, `No se encontraron turnos para la especialidad: ${especialidad}`);
-        }
-        respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnosFiltrados);
-    } catch (error) {
-        respuestaEstandar(res, 500, false, 'Error interno del servidor');
-    }
-};
-
-const marcarAtendido = async (req, res) => {
+const marcarAtendido = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
 
         const turnoActualizado = await Turno.findByIdAndUpdate(
             id,
-            { Estado: 'Atendido'},
+            { Estado: EstadoTurno.ATENDIDO },
             { new: true }
         );
 
         if ( !turnoActualizado) return respuestaEstandar(res, 404, false, 'Turno No Encontrado' , id);
         return respuestaEstandar(res, 200, true, 'Turno Actualizado', turnoActualizado);
-    } catch (error) {
+    } catch (error: any) {
         return respuestaEstandar(res, 500, false, 'Error de Servidor', error.message);
     }
 };
 
-module.exports = {
+exports = {
     getTurnos,
     createTurno,
     deleteTurno,
-    getTurnosPorEspecialidad,
     marcarAtendido
 };
