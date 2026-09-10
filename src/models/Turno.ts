@@ -1,8 +1,11 @@
-const mongoose = require('mongoose');
+import {Schema, model, Document} from 'mongoose';
+import {ITurno} from '../interface/Turnos/Turno.interface';
+import {Especialidad} from '../interface/Turnos/TurnoEspecialidad.enum';
+import {EstadoTurno} from '../interface/Turnos/TurnoEstado.enum';
 
-const turnoSchema = new mongoose.Schema({
+const turnoSchema = new Schema<ITurno>({
     Paciente: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Paciente',
         required: [true, 'El nombre del paciente es obligatorio'],
     },
@@ -10,21 +13,21 @@ const turnoSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: {
-        values: ['ODONTOLOGIA','CARDIOLOGIA','PEDIATRIA','DERMATOLOGIA','NEUROLOGIA'],
+        values: Object.values(Especialidad),
         message: '{VALUE} no es una especialidad válida'
     },
     uppercase: true,
-    set: function(value) {
+    set: function(value: string): string {
         return value
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
     }
-},
+} as any,
     FechaTurno: {
         type: Date,
         required: [true, 'La fecha del turno es obligatoria'],
         validate: {
-            validator: function(value) {
+            validator: function(value: Date) {
                 return value > new Date();
             },
             message: 'La fecha del turno debe ser futura'
@@ -33,7 +36,7 @@ const turnoSchema = new mongoose.Schema({
     Estado: {
         type: String,
         enum: {
-            values: ['En Espera', 'Atendido', 'Cancelado'],
+            values: Object.values(EstadoTurno),
             message: '{VALUE} no es un estado válido'
         },
     },
@@ -47,11 +50,13 @@ const turnoSchema = new mongoose.Schema({
 });
 
 turnoSchema.set('toJSON', {
-    transform: (documento, turnoRetorno) => {
+    transform: (documento: Document, turnoRetorno: Record<string, any>) => {
         turnoRetorno.id = turnoRetorno._id;
         delete turnoRetorno._id;
         delete turnoRetorno.__v;
     }
 });
 
-module.exports = mongoose.model('Turno', turnoSchema);
+const TurnoModel = model<ITurno>('Turno', turnoSchema);
+
+export default TurnoModel;
