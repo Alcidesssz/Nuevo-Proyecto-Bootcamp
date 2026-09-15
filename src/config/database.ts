@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const connectDB = async () => {
+export const connectDB = async (): Promise<void> => {
     try {
-        await mongoose.connect(process.env.DATABASE_URL_ATLAS);
-    } catch (error) {
+        await mongoose.connect(process.env.DATABASE_URL_ATLAS as string);
+    } catch (error: any) {
         console.error('🔴Error al conectar a la base de datos:', error.message);
         process.exit(1);
     }

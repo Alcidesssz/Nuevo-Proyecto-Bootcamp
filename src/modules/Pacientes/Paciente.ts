@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+import type { IPaciente } from './types/Paciente.interface';
+import mongoose from 'mongoose';
 
-const pacienteSchema = new mongoose.Schema({
+const pacienteSchema = new mongoose.Schema<IPaciente>({
     Nombre: {
         type: String,
         required: [true, 'El nombre del paciente es obligatorio'],
@@ -97,4 +98,4 @@ pacienteSchema.set('toJSON', {
     }
 });
 
-module.exports = mongoose.model('Paciente', pacienteSchema);
+exports = mongoose.model('Paciente', pacienteSchema);

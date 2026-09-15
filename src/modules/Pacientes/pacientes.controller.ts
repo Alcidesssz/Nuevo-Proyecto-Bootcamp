@@ -1,21 +1,41 @@
-const Paciente = require('../models/Paciente');
-const respuestaEstandar = require('../utils/respuestaEstandar');
+import type { Request, Response } from 'express';
+import Paciente from './Paciente';
 
-const getPacientes = async (req, res) => {
+import {respuestaEstandar} from '../../utils/respuestaEstandar';
+
+export const getPacientes = async (req: Request, res: Response) => {
     try {
 
         // ?ObraSocial=OSDE&DNI=12345678
         const { ObraSocial, DNI } = req.query;
 
-        const filtro = {};
+        const filtro: Record<string, string> = {};
 
         if (ObraSocial) {
-            let obraSocial = null;
+            let obraSocial: string | null = null;
 
             if (typeof ObraSocial === 'string') {
                 obraSocial = ObraSocial.trim().toUpperCase();
-            } else if (typeof ObraSocial === 'object') {
-                const obraSocialQuery = ObraSocial.nombre || ObraSocial.name || ObraSocial.ObraSocial;
+            } else if (
+                typeof ObraSocial === 'object' &&
+                ObraSocial !== null &&
+                !Array.isArray(ObraSocial)
+            ) {
+                const obraSocialObj = ObraSocial as {
+                    nombre?: unknown;
+                    name?: unknown;
+                    ObraSocial?: unknown;
+                };
+
+                const obraSocialQuery =
+                    typeof obraSocialObj.nombre === 'string'
+                        ? obraSocialObj.nombre
+                        : typeof obraSocialObj.name === 'string'
+                            ? obraSocialObj.name
+                            : typeof obraSocialObj.ObraSocial === 'string'
+                                ? obraSocialObj.ObraSocial
+                                : null;
+
                 if (typeof obraSocialQuery === 'string') {
                     obraSocial = obraSocialQuery.trim().toUpperCase();
                 }
@@ -34,13 +54,13 @@ const getPacientes = async (req, res) => {
 
         const pacientes = await Paciente.find(filtro);
         respuestaEstandar(res, 200, true, 'Pacientes encontrados', pacientes);
-    } catch (error) {
+    } catch (error: any) {
         console.error('🔴 Error al obtener pacientes:', error);
         respuestaEstandar(res, 500, false, 'Error al obtener los pacientes', null);
     }
 };
 
-const createPaciente = async (req, res) => {
+export const createPaciente = async (req: Request, res: Response) => {
     try {
         const nuevoPaciente = await Paciente.create(req.body);
 
@@ -52,14 +72,14 @@ const createPaciente = async (req, res) => {
             nuevoPaciente
         );
 
-    } catch (error) {
+    } catch (error: any) {
 
         console.error("❌ ERROR REAL AL CREAR PACIENTE:");
         console.error(error);
 
         if (error.name === 'ValidationError') {
             const errores = Object.values(error.errors).map(
-                err => err.message
+                (err: any) => err.message
             );
 
             return respuestaEstandar(
@@ -81,7 +101,7 @@ const createPaciente = async (req, res) => {
     }
 };
 
-const deletePaciente = async (req, res) => {
+export const deletePaciente = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
         const paciente = await Paciente.findById(id);
@@ -90,13 +110,7 @@ const deletePaciente = async (req, res) => {
         }
         const pacienteEliminado = await Paciente.findByIdAndDelete(id);
         respuestaEstandar(res, 200, true, 'Paciente eliminado', pacienteEliminado);
-    } catch (error) {
+    } catch (error: any) {
         respuestaEstandar(res, 500, false, 'Error al eliminar el paciente', null);
     }
-};
-
-module.exports = {
-    getPacientes,
-    createPaciente,
-    deletePaciente
 };

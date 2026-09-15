@@ -1,11 +1,11 @@
-import {Request, Response} from 'express';
-import {EstadoTurno} from '../interface/Turnos/TurnoEstado.enum';
-import {ICrearTurnoDTO, IQueryUrgencia} from '../interface/Turnos/request/TurnoDTO';
+import type {Request, Response} from 'express';
+import { EstadoTurno } from './types/TurnoEstado.enum';
+import type { ICrearTurnoDTO, IQueryUrgencia } from './dtos/turno.schema';
+import type { ITurno } from './types/Turno.interface';
+import Turno from '../../modules/Turnos/Turno';
+import {respuestaEstandar} from '../../utils/respuestaEstandar';
 
-import Turno from '../models/Turno';
-const respuestaEstandar = require('../utils/respuestaEstandar');
-
-const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string }>, res: Response) => {
+export const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string }>, res: Response) => {
     try {
 
         const {id} = req.query;
@@ -13,7 +13,10 @@ const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string 
 
             if (id) {
                 const turnos  = await Turno.findById(id).populate('Paciente');
-                return respuestaEstandar(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
+                if (!turnos) {
+                    return respuestaEstandar(res, 404, false, `Turno no encontrado con ID ${id}`);
+                }
+                return respuestaEstandar<ITurno>(res, 200, true, 'Turnos obtenidos exitosamente', turnos);
             };
                 const turnos = await Turno.find({activo: true}).populate('Paciente');
         
@@ -23,7 +26,7 @@ const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string 
     }
 };
 
-const createTurno = async (req: Request<unknown, unknown, ICrearTurnoDTO, IQueryUrgencia>, res: Response) => {
+export const createTurno = async (req: Request<unknown, unknown, ICrearTurnoDTO, IQueryUrgencia>, res: Response) => {
     try {
 
         /*const origenPeticion = req.headers['x-origen'];
@@ -61,7 +64,7 @@ const createTurno = async (req: Request<unknown, unknown, ICrearTurnoDTO, IQuery
     }
 };
 
-const deleteTurno = async (req: Request<{id: string}>, res: Response) => {
+export const deleteTurno = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -80,7 +83,7 @@ const deleteTurno = async (req: Request<{id: string}>, res: Response) => {
     }
 };
 
-const marcarAtendido = async (req: Request<{id: string}>, res: Response) => {
+export const marcarAtendido = async (req: Request<{id: string}>, res: Response) => {
     try {
         const { id } = req.params;
 
