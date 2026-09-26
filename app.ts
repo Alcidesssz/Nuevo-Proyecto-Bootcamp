@@ -8,8 +8,8 @@ const app: Application = express();
 
 connectDB();
 
-const auditMiddleware = require('./src/middlewares/auditoria.middleware');
-const errorHandlerMiddleware = require('./src/middlewares/errorHandler.middleware');
+import auditMiddleware from './src/middlewares/auditoria.middleware';
+import errorHandlerMiddleware from './src/middlewares/errorHandler.middleware';
 
 import turnosRoutes from './src/modules/Turnos/turnos.routes';
 import pacientesRoutes from './src/modules/Pacientes/pacientes.routes';

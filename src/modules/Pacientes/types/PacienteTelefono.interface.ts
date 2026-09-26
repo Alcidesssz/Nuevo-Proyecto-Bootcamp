@@ -1,5 +1,5 @@
-export interface IPacienteTelefono {
-    tipo: string;
+interface ITelefono {
     codArea: string;
     numero: string;
 }
+export default ITelefono;

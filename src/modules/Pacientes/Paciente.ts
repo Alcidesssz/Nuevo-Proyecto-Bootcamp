@@ -1,5 +1,9 @@
 import type { IPaciente } from './types/Paciente.interface';
 import mongoose from 'mongoose';
+import {Schema, model, Document} from 'mongoose';
+import { PacienteSexo } from './types/PacienteSexo.enum';
+import { ObraSocial } from './types/PacienteObraSocial.enum';
+import { TipoTelefono } from './types/PacienteTelefono.enum';
 
 const pacienteSchema = new mongoose.Schema<IPaciente>({
     Nombre: {
@@ -25,7 +29,7 @@ const pacienteSchema = new mongoose.Schema<IPaciente>({
     Sexo: {
         type: String,
         enum: {
-            values: ['Masculino', 'Femenino', 'Otro'],
+            values: Object.values(PacienteSexo),
             message: '{VALUE} no es un sexo válido'
         }
     },
@@ -52,7 +56,7 @@ const pacienteSchema = new mongoose.Schema<IPaciente>({
         tipo: {
             type: String,
             enum: {
-                values: ['Fijo', 'Celular'],
+                values: Object.values(TipoTelefono),
             }
         },
         codArea: {
@@ -78,7 +82,7 @@ const pacienteSchema = new mongoose.Schema<IPaciente>({
             required: true,
             uppercase: true,
             enum: {
-                values: ['OSDE', 'SWISS MEDICAL', 'GALENO', 'MEDIFE','OSFA', 'OTRO', 'NINGUNA'],
+                values: Object.values(ObraSocial),
                 message: '{VALUE} no es una obra social válida'
             },
         },
@@ -91,11 +95,13 @@ const pacienteSchema = new mongoose.Schema<IPaciente>({
 });
 
 pacienteSchema.set('toJSON', {
-    transform: (documento, pacienteRetorno) => {
+    transform: (documento: Document, pacienteRetorno: Record<string, any>) => {
         pacienteRetorno.id = pacienteRetorno._id;
         delete pacienteRetorno._id;
         delete pacienteRetorno.__v;
     }
 });
 
-exports = mongoose.model('Paciente', pacienteSchema);
+const PacienteModel = mongoose.model<IPaciente>('Paciente', pacienteSchema);
+
+export default PacienteModel;

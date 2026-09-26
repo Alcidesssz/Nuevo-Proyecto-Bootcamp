@@ -1,5 +1,5 @@
 const HistoriaClinica = require('../models/HistoriaClinica');
-const respuestaEstandar = require('../utils/respuestaEstandar');
+const respuestaEstandar = require('../../utils/respuestaEstandar');
 
 const getHistoriasClinicas = async (req, res) => {
     try {

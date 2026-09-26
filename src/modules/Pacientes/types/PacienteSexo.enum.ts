@@ -1,5 +1,5 @@
-export enum IPacienteSexo {
-    MASCULINO = "Masculino",
-    FEMENINO = "Femenino",
-    OTRO = "Otro"
+export enum PacienteSexo {
+    MASCULINO = "MASCULINO",
+    FEMENINO = "FEMENINO",
+    OTRO = "OTRO"
 }

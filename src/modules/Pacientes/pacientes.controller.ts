@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import Paciente from './Paciente';
+import Paciente from '../../modules/Pacientes/Paciente'
 
 import {respuestaEstandar} from '../../utils/respuestaEstandar';
 

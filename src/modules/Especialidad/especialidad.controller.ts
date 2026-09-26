@@ -1,53 +1,54 @@
-const Especialidad = require('../models/Especialidad');
-const respuestaEstandar = require('../utils/respuestaEstandar');
+import { Request, Response } from 'express';
+import Especialidad from './Especialidad';
+import {respuestaEstandar} from '../../utils/respuestaEstandar';
 
-const getEspecialidades = async (req, res) => {
+export const getEspecialidades = async (req: Request, res: Response) => {
   try {
     const especialidades = await Especialidad.find();
     return respuestaEstandar(res, 200, true, 'Especialidades obtenidas exitosamente', especialidades);
-  } catch (error) {
+  } catch (error: any) {
     return respuestaEstandar(res, 500, false, 'Error al obtener las especialidades', error.message);
   }
 };
 
-const getEspecialidadById = async (req, res) => {
+export const getEspecialidadById = async (req: Request, res: Response) => {
   try {
     const especialidad = await Especialidad.findById(req.params.id);
     if (!especialidad) {
       return respuestaEstandar(res, 404, false, 'Especialidad no encontrada');
     }
     return respuestaEstandar(res, 200, true, 'Especialidad obtenida', especialidad);
-  } catch (error) {
+  } catch (error: any) {
     return respuestaEstandar(res, 500, false, 'Error al obtener la especialidad', error.message);
   }
 };
 
-const createEspecialidad = async (req, res) => {
+export const createEspecialidad = async (req: Request, res: Response) => {
   try {
     const nuevaEspecialidad = await Especialidad.create(req.body);
     return respuestaEstandar(res, 201, true, 'Especialidad creada exitosamente', nuevaEspecialidad);
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === 'ValidationError') {
-      const errores = Object.values(error.errors).map(err => err.message);
+      const errores = Object.values(error.errors).map((err: any) => err.message);
       return respuestaEstandar(res, 400, false, 'Error de validación', errores);
     }
     return respuestaEstandar(res, 500, false, 'Error al crear la especialidad', error.message);
   }
 };
 
-const updateEspecialidad = async (req, res) => {
+export const updateEspecialidad = async (req: Request, res: Response) => {
   try {
     const especialidad = await Especialidad.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!especialidad) {
       return respuestaEstandar(res, 404, false, 'Especialidad no encontrada');
     }
     return respuestaEstandar(res, 200, true, 'Especialidad actualizada', especialidad);
-  } catch (error) {
+  } catch (error: any) {
     return respuestaEstandar(res, 500, false, 'Error al actualizar', error.message);
   }
 };
 
-const deleteEspecialidad = async (req, res) => {
+export const deleteEspecialidad = async (req: Request<{id: string}>, res: Response) => {
     try {
 
         const { id } = req.params;
@@ -63,16 +64,9 @@ const deleteEspecialidad = async (req, res) => {
         }
         
         return respuestaEstandar(res, 200, true,  'Especialidad eliminado exitosamente', especialidadBorrado);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error al eliminar el especialidad:', error);
         return respuestaEstandar(res, 400, false, 'ID con formato invalido', error.message);
     }
 };
 
-module.exports = {
-  getEspecialidades,
-  getEspecialidadById,
-  createEspecialidad,
-  updateEspecialidad,
-  deleteEspecialidad
-};

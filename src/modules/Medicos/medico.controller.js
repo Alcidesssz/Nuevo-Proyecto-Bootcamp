@@ -1,6 +1,6 @@
 // src/controllers/medico.controller.js
 const Medico = require('../models/Medico.js');
-const respuestaEstandar = require('../utils/respuestaEstandar');
+const respuestaEstandar = require('../../utils/respuestaEstandar.js');
 
 // Controlador para obtener todos los médicos
 const getMedicos = async (req, res) => {

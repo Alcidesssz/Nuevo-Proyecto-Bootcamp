@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Turno = require('../models/Turno');
 const Paciente = require('../models/Paciente');
-const respuestaEstandar = require('../utils/respuestaEstandar');
+const respuestaEstandar = require('../../utils/respuestaEstandar');
 
 const registrarIngreso = async (req, res) => {
     const session = await mongoose.startSession();
