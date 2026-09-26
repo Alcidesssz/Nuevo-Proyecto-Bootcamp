@@ -1,22 +1,26 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ZodObject, ZodError} from 'zod';
+import { z} from 'zod';
 import { respuestaEstandar} from '../utils/respuestaEstandar';
 
-export const validarSchema = (schema: ZodObject) => 
+export const validarSchema = (schema: z.ZodType<any, any, any>) => {
     (req: Request, res: Response, next: NextFunction) => {
-        try {
-            schema.parse({
+            const resultado = schema.safeParse({
                 body: req.body,
                 query: req.query,
                 params: req.params,
             });
 
-            next();
-        } catch (error: any) {
-            if (error instanceof ZodError) {
-                const errores = error.message;
-                return respuestaEstandar(res, 400, false, "Datos Invalidos", errores)
+            if (!resultado.success) {
+                const detalles = resultado.error.issues.map((issue) => ({
+                    campo: issue.path.join('.') || '(cuerpo completo)',
+                    mensaje: issue.message,
+                }));
+                return respuestaEstandar(res, 400, false, 'Error de validacion', detalles);
             }
-            next(error);
-        }
+
+            req.body = resultado.data.body;
+            next();
+        };
     };
+
+    export default {validarSchema}
