@@ -2,9 +2,9 @@ import type { Request, Response } from 'express';
 import type { ICrearEspecialidadDTO, IActualizarEspecialidadDTO } from './dtos/Especialidad.schema';
 
 const Especialidad = require('./Especialidad.model');
-const Medico = require('../Medico/Medico.model');
+const Medico = require('../Medico/Medico');
 const Consultorio = require('../Consultorio/Consultorio.model');
-const respuestaEstandar = require('../../utils/respuestaEstandar.js');
+const { respuestaEstandar } = require('../../utils/respuestaEstandar.js');
 const { esErrorDuplicado } = require('../../utils/manejoErrores.js');
 
 // GET /api/v1/especialidades
@@ -85,8 +85,8 @@ const deleteEspecialidad = async (req: Request<{ id: string }>, res: Response) =
         }
 
         const [medicos, consultorios] = await Promise.all([
-            Medico.countDocuments({ especialidad: id }),
-            Consultorio.countDocuments({ especialidad: id }),
+            Medico.countDocuments({ Especialidad: id }),
+            Consultorio.countDocuments({ Especialidad: id }),
         ]);
 
         if (medicos > 0 || consultorios > 0) {

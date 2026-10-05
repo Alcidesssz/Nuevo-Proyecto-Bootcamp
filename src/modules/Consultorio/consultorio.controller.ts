@@ -1,15 +1,15 @@
 import type { Request, Response } from 'express';
 import type { ICrearConsultorioDTO, IActualizarConsultorioDTO } from './dtos/Consultorio.schema';
 
-const Consultorio = require('./Consultorio.model');
-const respuestaEstandar = require('../../utils/respuestaEstandar');
+const Consultorio = require('./Consultorio.model').default;
+const { respuestaEstandar } = require('../../utils/respuestaEstandar');
 const { esErrorDuplicado } = require('../../utils/manejoErrores.js');
 
 export const getConsultorios = async (req: Request, res: Response) => {
     try {
         const consultorios = await Consultorio.find()
-            .populate('medico')
-            .populate('especialidad');
+            .populate('Medico')
+            .populate('Especialidad');
 
         return respuestaEstandar(res, 200, true, 'Consultorios obtenidos exitosamente', consultorios);
     } catch (error: any) {
@@ -39,7 +39,7 @@ export const updateConsultorio = async (req: Request<{ id: string }, {}, IActual
         const consultorioActualizado = await Consultorio.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
-        }).populate('medico').populate('especialidad');
+        }).populate('Medico').populate('Especialidad');
 
         if (!consultorioActualizado) {
             return respuestaEstandar(res, 404, false, 'Consultorio no encontrado');

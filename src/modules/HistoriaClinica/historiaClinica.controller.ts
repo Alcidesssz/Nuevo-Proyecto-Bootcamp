@@ -1,5 +1,5 @@
 const HistoriaClinica = require('./HistoriaClinica.model');
-const respuestaEstandar = require('../../utils/respuestaEstandar');
+const { respuestaEstandar } = require('../../utils/respuestaEstandar');
 
 const getHistoriasClinicas = async (req, res) => {
     try {
@@ -18,7 +18,7 @@ const getHistoriasClinicas = async (req, res) => {
         if (sintomas) {
             filter.sintomas = { $in: sintomas.split(',') };
         }
-        const historiasClinicas = await HistoriaClinica.find(filter).populate('paciente').populate('medico',"nombre especialidad");   
+        const historiasClinicas = await HistoriaClinica.find(filter).populate('Paciente').populate('Medico',"nombre especialidad");
 
         return respuestaEstandar(res, 200, true, 'Historias clínicas obtenidas exitosamente', historiasClinicas);
     } catch (error) {

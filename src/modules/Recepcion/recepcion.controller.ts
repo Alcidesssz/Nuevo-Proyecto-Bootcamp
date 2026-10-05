@@ -2,9 +2,9 @@ import type {Request, Response} from 'express';
 import type {IRegistrarIngresoDTO} from './dtos/Recepcion.schema';
 
 const mongoose = require('mongoose');
-const Turno = require('../Turnos/Turno.model');
+const Turno = require('../Turnos/Turno.model').default;
 const Paciente = require('../Pacientes/Paciente.model');
-const respuestaEstandar = require('../../utils/respuestaEstandar');
+const { respuestaEstandar } = require('../../utils/respuestaEstandar');
 
 export const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res: Response) => {
     const session = await mongoose.startSession();
@@ -26,7 +26,7 @@ export const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO
         await session.commitTransaction();
         await session.endSession();
 
-        const turnoCompleto = await Turno.findById(nuevoTurno.id).populate('paciente');
+        const turnoCompleto = await Turno.findById(nuevoTurno.id).populate('Paciente');
         
         respuestaEstandar(res, 201, true, 'Ingreso registrado exitosamente', turnoCompleto);
 }   catch (error: any) {

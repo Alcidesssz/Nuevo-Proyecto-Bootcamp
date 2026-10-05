@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 
 const jwt = require('jsonwebtoken');
-const respuestaEstandar = require('../utils/respuestaEstandar.js');
+const { respuestaEstandar } = require('../utils/respuestaEstandar.js');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'salita_municipal_secret_2026';
 

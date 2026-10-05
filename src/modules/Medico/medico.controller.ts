@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import type { ICrearMedicoDTO, IActualizarMedicoDTO } from './dtos/Medico.schema';
 
 const Medico = require('./Medico');
-const respuestaEstandar = require('../../utils/respuestaEstandar.js');
+const { respuestaEstandar } = require('../../utils/respuestaEstandar.js');
 const { esErrorDuplicado } = require('../../utils/manejoErrores.js');
 
 // GET /api/v1/medicos  -> SOLO activos (soft "apagado" vía campo activo)
@@ -10,7 +10,7 @@ const getMedicos = async (req: Request, res: Response) => {
     try {
         // populate('especialidad') => reemplaza el ObjectId de especialidad
         // por el documento Especialidad completo en la respuesta.
-        const medicos = await Medico.find({ activo: true }).populate('especialidad');
+        const medicos = await Medico.find({ activo: true }).populate('Especialidad');
         return respuestaEstandar(res, 200, true, 'Médicos obtenidos exitosamente', medicos);
     } catch (error: any) {
         return respuestaEstandar(res, 500, false, 'Error interno del servidor', error.message);

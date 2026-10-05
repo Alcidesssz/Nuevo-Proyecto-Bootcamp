@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('./Usuario.model');
-const respuestaEstandar = require('../../utils/respuestaEstandar.js');
+const { respuestaEstandar } = require('../../utils/respuestaEstandar.js');
 const { esErrorDuplicado } = require('../../utils/manejoErrores.js');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'salita_municipal_secret_2026';
