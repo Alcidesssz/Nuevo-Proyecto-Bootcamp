@@ -1,11 +1,3 @@
-// ============================================================
-//  MIDDLEWARE: validarJWT (protección de rutas)
-//  Lee el header Authorization, exige "Bearer <token>", verifica
-//  la firma/expiración con el secreto del .env y deja el payload
-//  en req.usuario para que el controller lo use (si lo necesita).
-//  Si falta o es inválido -> 401 (respuestaEstandar).
-// ============================================================
-
 import type { Request, Response, NextFunction } from 'express';
 
 const jwt = require('jsonwebtoken');

@@ -9,7 +9,7 @@ const app: Application = express();
 connectDB();
 
 import auditMiddleware from './src/middlewares/auditoria.middleware';
-import errorHandlerMiddleware from './src/middlewares/errorHandler.middleware';
+import errorHandler from './src/middlewares/errorHandler.middleware';
 const rutaNoEncontrada = require("./src/middlewares/rutaNoEncontrada.middleware");
 
 const authRoutes = require('./src/modules/auth/auth.routes');
@@ -36,7 +36,7 @@ app.use('/api/v1/recepcion', recepcionRoutes);
 
 
 app.use(rutaNoEncontrada);
-app.use(errorHandlerMiddleware);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -1,12 +1,16 @@
 import type { Request, Response, NextFunction } from 'express';
 
-const rutaNoEncontrada = (req: Request, res: Response, next: NextFunction) => {
-    res.status(404).json({
-        success: false,
-        timestamp: new Date().toISOString(),
-        error: 'Ruta no encontrada (404)',
-        message: `La ruta ${req.originalUrl} no existe en el servidor.`
-    });
+const respuestaEstandar = require('../utils/respuestaEstandar');
+
+const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+    const estado = err.status || 500;
+    const mensaje = estado === 500 ? 'Error interno del servidor' : err.message;
+
+    if (estado === 500) {
+        console.error(`[ERROR] ${err.message}`);
+    }
+
+    return respuestaEstandar(res, estado, false, mensaje, null);
 };
 
-export default rutaNoEncontrada;
+export default errorHandler;
