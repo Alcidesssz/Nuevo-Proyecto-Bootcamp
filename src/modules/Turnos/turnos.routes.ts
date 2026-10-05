@@ -1,8 +1,8 @@
 import express from 'express';
 
 import { getTurnos, createTurno, deleteTurno, marcarAtendido } from './turnos.controller';
-import { validarSchema } from '../../middlewares/validarDatos.middleware';
-import { CrearTurnoSchema } from './dtos/turno.schema';
+const { validarSchema } = require('../../middlewares/validarDatos.middleware');
+const { CrearTurnoSchema } = require('./dtos/turno.schema');
 
 const router = express.Router();
 

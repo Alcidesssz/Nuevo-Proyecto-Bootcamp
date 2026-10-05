@@ -1,9 +1,12 @@
+import type {Request, Response} from 'express';
+import type {IRegistrarIngresoDTO} from './dtos/Recepcion.schema';
+
 const mongoose = require('mongoose');
 const Turno = require('../models/Turno');
 const Paciente = require('../models/Paciente');
 const respuestaEstandar = require('../../utils/respuestaEstandar');
 
-const registrarIngreso = async (req, res) => {
+const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -26,12 +29,12 @@ const registrarIngreso = async (req, res) => {
         const turnoCompleto = await Turno.findById(nuevoTurno.id).populate('paciente');
         
         respuestaEstandar(res, 201, true, 'Ingreso registrado exitosamente', turnoCompleto);
-}   catch (error) {
+}   catch (error: any) {
         await session.abortTransaction();
         await session.endSession();
 
         if (error.name === 'ValidationError') {
-            const errores = Object.values(error.errors).map(err => err.message);
+            const errores = Object.values(error.errors).map((err: any) => err.message);
             return respuestaEstandar(res, 400, false, 'Error de validación', errores);
         }
 
@@ -39,6 +42,4 @@ const registrarIngreso = async (req, res) => {
     };
 };
 
-module.exports = {
-    registrarIngreso
-};
+export default { registrarIngreso };

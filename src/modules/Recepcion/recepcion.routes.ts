@@ -1,8 +1,10 @@
-import {Router} from 'express';
-import {registrarIngreso} from './recepcion.controller';
+const express = require("express");
+const router = express.Router();
+const { registrarIngreso } = require('./Recepcion.controller');
 
-const router = Router();
+const { validarSchema } = require('../../middlewares/validarDatos.middleware');
+const { registrarIngresoSchema } = require('./dtos/Recepcion.schema');
 
-router.post('/', registrarIngreso);
+router.post("/ingreso", validarSchema(registrarIngresoSchema), registrarIngreso);
 
-export default router;
+module.exports = router;

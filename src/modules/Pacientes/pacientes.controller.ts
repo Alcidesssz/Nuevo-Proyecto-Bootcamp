@@ -1,4 +1,6 @@
 import type { Request, Response } from 'express';
+import type { ICrearPacienteDTO, IActualizarPacienteDTO, IFiltroPacientesQuery, IAgregarConsultaDTO } from './dtos/paciente.schema'
+
 import Paciente from '../../modules/Pacientes/Paciente'
 
 import {respuestaEstandar} from '../../utils/respuestaEstandar';
