@@ -7,7 +7,7 @@ const { crearHistoriaClinicaSchema } = require('./dtos/HistoriaClinica.schema');
 
 router.get('/', getHistoriasClinicas);
 router.get('/:id', getHistoriaClinicaById);
-router.post('/', createHistoriaClinica);
+router.post('/', validarSchema(crearHistoriaClinicaSchema), createHistoriaClinica);
 router.delete('/:id', deleteHistoriaClinica);
 
 module.exports = router;
