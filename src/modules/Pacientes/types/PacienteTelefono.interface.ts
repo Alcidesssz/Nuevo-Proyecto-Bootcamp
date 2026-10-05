@@ -1,5 +1,4 @@
-interface ITelefono {
+export default interface IPacienteTelefono {
     codArea: string;
     numero: string;
 }
-export default ITelefono;

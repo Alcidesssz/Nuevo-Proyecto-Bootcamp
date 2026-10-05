@@ -1,17 +1,17 @@
-import {Types, Document} from 'mongoose';
-import type {IPacienteDireccion} from './PacienteDireccion.interface';
-import { PacienteSexo } from './PacienteSexo.enum';
-import type {TipoTelefono} from './PacienteTelefono.enum';
-import type {ObraSocial} from './PacienteObraSocial.enum';
+import type { Types } from 'mongoose';
+import type { IPacienteDireccion } from './PacienteDireccion.interface';
+import type IPacienteTelefono from './PacienteTelefono.interface';
+import type IHistorialMedico from './HistorialMedico.interface';
 
-export interface IPaciente extends Document {
-    id?: Types.ObjectId;
+export default interface IPaciente {
+    _id: Types.ObjectId;
     Nombre: string;
+    Apellido: string;
     DNI: string;
-    Sexo: PacienteSexo;
     FechaNacimiento: Date;
+    Sexo: 'Masculino' | 'Femenino' | 'Otro';
     Direccion: IPacienteDireccion;
-    Telefono: TipoTelefono;
+    Telefono: IPacienteTelefono;
     CorreoElectronico: string;
-    ObraSocial: ObraSocial;
+    HistorialMedico: IHistorialMedico;
 }

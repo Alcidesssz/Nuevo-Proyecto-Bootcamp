@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { crearPacienteSchema } from '../../Pacientes/dtos/paciente.schema';
+import { crearPacienteSchema } from '../../Pacientes/dtos/Paciente.schema';
 import { Especialidad } from '../../Turnos/types/TurnoEspecialidad.enum';
 import { EstadoTurno } from '../../Turnos/types/TurnoEstado.enum';
 

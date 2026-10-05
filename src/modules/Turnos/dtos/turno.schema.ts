@@ -11,12 +11,15 @@ export const CrearTurnoSchema = z.object({
         EstadoTurno: z.enum(EstadoTurno, {
             error: 'Estado de turno no valido'
         }),
-        FechaTurno: z.iso.date({message: 'Formato de fecha invalido'})
+        FechaTurno: z.iso.date({message: 'Formato de fecha invalido'}),
+        Estado: z.enum(EstadoTurno, {
+            error: "Estado de turno no valido"
+        }).optional(), 
+    }),
+    query: z.object({
+        urgencia: z.enum(['true', 'false']).optional()
     })
 });
     
-export type CrearTurnoDTO = z.infer<typeof CrearTurnoSchema>['body'];
-
-export interface IQueryUrgencia {
-    urgencia?: string;
-}
+export type ICrearTurnoDTO = z.infer<typeof CrearTurnoSchema>['body'];
+export type IQueryUrgencia = z.infer<typeof CrearTurnoSchema>['query'];

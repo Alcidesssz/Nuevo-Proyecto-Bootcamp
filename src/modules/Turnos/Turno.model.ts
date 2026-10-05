@@ -1,7 +1,7 @@
 import {Schema, model, Document} from 'mongoose';
-import type {ITurno} from '../../modules/Turnos/types/Turno.interface';
-import {Especialidad} from '../../modules/Turnos/types/TurnoEspecialidad.enum';
-import {EstadoTurno} from '../../modules/Turnos/types/TurnoEstado.enum';
+import type {ITurno} from './types/Turno.interface';
+import {Especialidad} from './types/TurnoEspecialidad.enum';
+import {EstadoTurno} from './types/TurnoEstado.enum';
 
 const turnoSchema = new Schema<ITurno>({
     Paciente: {

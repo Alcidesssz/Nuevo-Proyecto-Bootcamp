@@ -1,8 +1,8 @@
 import type {Request, Response} from 'express';
 import { EstadoTurno } from './types/TurnoEstado.enum';
-import type { CrearTurnoDTO, IQueryUrgencia } from './dtos/turno.schema';
+import type { ICrearTurnoDTO, IQueryUrgencia } from './dtos/turno.schema';
 import type { ITurno } from './types/Turno.interface';
-import Turno from '../../modules/Turnos/Turno';
+import Turno from './Turno.model';
 import {respuestaEstandar} from '../../utils/respuestaEstandar';
 
 export const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: string }>, res: Response) => {
@@ -26,7 +26,7 @@ export const getTurnos = async (req: Request< unknown, unknown, unknown, { id?: 
     }
 };
 
-export const createTurno = async (req: Request<unknown, unknown, CrearTurnoDTO, IQueryUrgencia>, res: Response) => {
+export const createTurno = async (req: Request<unknown, unknown, ICrearTurnoDTO, IQueryUrgencia>, res: Response) => {
     try {
 
         /*const origenPeticion = req.headers['x-origen'];

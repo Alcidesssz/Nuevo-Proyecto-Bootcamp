@@ -10,7 +10,7 @@ export interface ITurno extends Document {
     FechaTurno: Date;
     Estado?: EstadoTurno;
     Observaciones?: string;
-    activo: boolean;
+    activo?: boolean;
 }
 
 
