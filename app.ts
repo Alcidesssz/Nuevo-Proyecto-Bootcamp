@@ -10,7 +10,9 @@ connectDB();
 
 import auditMiddleware from './src/middlewares/auditoria.middleware';
 import errorHandlerMiddleware from './src/middlewares/errorHandler.middleware';
+const rutaNoEncontrada = require("./src/middlewares/rutaNoEncontrada.middleware");
 
+const authRoutes = require('./src/modules/auth/auth.routes');
 import turnosRoutes from './src/modules/Turnos/turnos.routes';
 import pacientesRoutes from './src/modules/Pacientes/pacientes.routes';
 const especialidadRoutes = require('./src/routes/especialidad.routes');
@@ -23,6 +25,7 @@ app.use(cors());
 app.use(express.json());
 app.use(auditMiddleware);
 
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/turnos', turnosRoutes);
 app.use('/api/v1/pacientes', pacientesRoutes);
 app.use('/api/v1/especialidades', especialidadRoutes);
@@ -31,6 +34,8 @@ app.use('/api/v1/historias-clinicas', historiaClinicaRoutes);
 app.use('/api/v1/consultorios', consultorioRoutes);
 app.use('/api/v1/recepcion', recepcionRoutes);
 
+
+app.use(rutaNoEncontrada);
 app.use(errorHandlerMiddleware);
 
 const PORT = process.env.PORT || 3000;
