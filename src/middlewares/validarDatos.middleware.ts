@@ -3,7 +3,7 @@ import { z} from 'zod';
 import { respuestaEstandar} from '../utils/respuestaEstandar';
 
 export const validarSchema = (schema: z.ZodType<any, any, any>) => {
-    (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction) => {
             const resultado = schema.safeParse({
                 body: req.body,
                 query: req.query,
@@ -23,4 +23,4 @@ export const validarSchema = (schema: z.ZodType<any, any, any>) => {
         };
     };
 
-    export default {validarSchema}
+    module.exports = {validarSchema};

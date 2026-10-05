@@ -6,7 +6,7 @@ const Turno = require('../models/Turno');
 const Paciente = require('../models/Paciente');
 const respuestaEstandar = require('../../utils/respuestaEstandar');
 
-const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res: Response) => {
+export const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res: Response) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -42,4 +42,4 @@ const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res:
     };
 };
 
-export default { registrarIngreso };
+module.exports = { registrarIngreso };

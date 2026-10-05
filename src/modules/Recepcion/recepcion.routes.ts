@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
+import { registrarIngreso } from "./recepcion.controller";
+import { validarSchema } from "../../middlewares/validarDatos.middleware";
+import { IRegistrarIngresoDTO } from "./dtos/Recepcion.schema";
+
 const router = express.Router();
-const { registrarIngreso } = require('./Recepcion.controller');
 
-const { validarSchema } = require('../../middlewares/validarDatos.middleware');
-const { registrarIngresoSchema } = require('./dtos/Recepcion.schema');
-
-router.post("/ingreso", validarSchema(registrarIngresoSchema), registrarIngreso);
+router.post("/ingreso", validarSchema(IRegistrarIngresoDTO), registrarIngreso);
 
 module.exports = router;

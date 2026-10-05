@@ -13,6 +13,4 @@ export const IRegistrarIngresoDTO = z.object({
     })
 })
 
-
-
-    
+export type IRegistrarIngresoDTO = z.infer<typeof IRegistrarIngresoDTO>['body'];
