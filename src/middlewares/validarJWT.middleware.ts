@@ -3,6 +3,8 @@ import type { Request, Response, NextFunction } from 'express';
 const jwt = require('jsonwebtoken');
 const respuestaEstandar = require('../utils/respuestaEstandar.js');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'salita_municipal_secret_2026';
+
 // Coincide con los valores del enum Rol del modelo Usuario.
 type Rol = 'ADMIN' | 'RECEPCIONISTA';
 
@@ -38,7 +40,7 @@ const validarJWT = (req: Request, res: Response, next: NextFunction) => {
 
     try {
         // Verifica firma Y expiración. Si el token es inválido o venció, tira.
-        const decodificado = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
+        const decodificado = jwt.verify(token, JWT_SECRET) as TokenPayload;
 
         req.usuario = decodificado;
 

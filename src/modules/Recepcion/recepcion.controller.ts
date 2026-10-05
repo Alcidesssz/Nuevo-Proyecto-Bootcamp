@@ -2,8 +2,8 @@ import type {Request, Response} from 'express';
 import type {IRegistrarIngresoDTO} from './dtos/Recepcion.schema';
 
 const mongoose = require('mongoose');
-const Turno = require('../models/Turno');
-const Paciente = require('../models/Paciente');
+const Turno = require('../Turnos/Turno.model');
+const Paciente = require('../Pacientes/Paciente.model');
 const respuestaEstandar = require('../../utils/respuestaEstandar');
 
 export const registrarIngreso = async (req: Request<{}, {}, IRegistrarIngresoDTO>, res: Response) => {

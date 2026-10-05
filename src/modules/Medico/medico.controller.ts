@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import type { ICrearMedicoDTO, IActualizarMedicoDTO } from './dtos/Medico.schema';
 
-const Medico = require('../models/Medico.js');
+const Medico = require('./Medico');
 const respuestaEstandar = require('../../utils/respuestaEstandar.js');
 const { esErrorDuplicado } = require('../../utils/manejoErrores.js');
 

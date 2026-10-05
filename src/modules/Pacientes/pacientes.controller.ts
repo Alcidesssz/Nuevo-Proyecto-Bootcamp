@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import type { ICrearPacienteDTO, IActualizarPacienteDTO, IFiltroPacientesQuery, IAgregarConsultaDTO } from './dtos/Paciente.schema'
 
-import Paciente from './Paciente.model'
+const Paciente = require('./Paciente.model');
 
 import {respuestaEstandar} from '../../utils/respuestaEstandar';
 

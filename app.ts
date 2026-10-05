@@ -11,28 +11,29 @@ connectDB();
 import auditMiddleware from './src/middlewares/auditoria.middleware';
 import errorHandler from './src/middlewares/errorHandler.middleware';
 const rutaNoEncontrada = require("./src/middlewares/rutaNoEncontrada.middleware");
+const { validarJWT } = require('./src/middlewares/validarJWT.middleware');
 
 const authRoutes = require('./src/modules/auth/auth.routes');
 import turnosRoutes from './src/modules/Turnos/turnos.routes';
 import pacientesRoutes from './src/modules/Pacientes/pacientes.routes';
-const especialidadRoutes = require('./src/routes/especialidad.routes');
-const medicoRoutes = require('./src/routes/medico.routes');
-const historiaClinicaRoutes = require('./src/routes/historiaClinica.routes');
-const consultorioRoutes = require('./src/routes/consultorio.routes');
-const recepcionRoutes = require('./src/routes/recepcion.routes');
+const especialidadRoutes = require('./src/modules/Especialidad/especialidad.routes');
+const medicoRoutes = require('./src/modules/Medico/medico.routes');
+const historiaClinicaRoutes = require('./src/modules/HistoriaClinica/historiaClinica.routes');
+import consultorioRoutes from './src/modules/Consultorio/consultorio.routes';
+const recepcionRoutes = require('./src/modules/Recepcion/recepcion.routes');
 
 app.use(cors());
 app.use(express.json());
 app.use(auditMiddleware);
 
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/turnos', turnosRoutes);
-app.use('/api/v1/pacientes', pacientesRoutes);
-app.use('/api/v1/especialidades', especialidadRoutes);
-app.use('/api/v1/medicos', medicoRoutes);
-app.use('/api/v1/historias-clinicas', historiaClinicaRoutes);
-app.use('/api/v1/consultorios', consultorioRoutes);
-app.use('/api/v1/recepcion', recepcionRoutes);
+app.use('/api/v1/turnos', validarJWT, turnosRoutes);
+app.use('/api/v1/pacientes', validarJWT, pacientesRoutes);
+app.use('/api/v1/especialidades', validarJWT, especialidadRoutes);
+app.use('/api/v1/medicos', validarJWT, medicoRoutes);
+app.use('/api/v1/historias-clinicas', validarJWT, historiaClinicaRoutes);
+app.use('/api/v1/consultorios', validarJWT, consultorioRoutes);
+app.use('/api/v1/recepcion', validarJWT, recepcionRoutes);
 
 
 app.use(rutaNoEncontrada);

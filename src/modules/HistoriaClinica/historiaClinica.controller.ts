@@ -1,4 +1,4 @@
-const HistoriaClinica = require('../models/HistoriaClinica');
+const HistoriaClinica = require('./HistoriaClinica.model');
 const respuestaEstandar = require('../../utils/respuestaEstandar');
 
 const getHistoriasClinicas = async (req, res) => {

@@ -1,4 +1,4 @@
-const esErrorDuplicado = (error: any): boolean => {
+export const esErrorDuplicado = (error: any): boolean => {
     if (!error) return false;
 
     // Caso clásico: MongoDB (índice único) responde code 11000.

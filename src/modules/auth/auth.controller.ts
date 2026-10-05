@@ -11,7 +11,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'salita_municipal_secret_2026';
 // POST /api/v1/auth/registro
 const registrarUsuario = async (req: Request, res: Response) => {
     try {
-        const { email, password, user, rol } = req.body;
+        const { email, password, user } = req.body;
 
         // Email O user ya registrados: findOne({email, user}) exigiría que
         // coincidan AMBOS; con $or alcanza con que exista uno de los dos.
@@ -27,8 +27,7 @@ const registrarUsuario = async (req: Request, res: Response) => {
         const nuevoUsuario = await Usuario.create({
             email,
             user,
-            password: passwordHash,
-            rol
+            password: passwordHash
         });
 
         return respuestaEstandar(res, 201, true, 'Usuario creado correctamente', {
