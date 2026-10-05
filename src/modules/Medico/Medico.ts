@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import {Schema, model} from 'mongoose';
 
-const medicoSchema = new mongoose.Schema({
+const medicoSchema = new Schema({
     Nombre: {
         type: String,
         required: [true, 'El nombre del médico es obligatorio'],
@@ -12,7 +12,7 @@ const medicoSchema = new mongoose.Schema({
         unique: [true, 'Esta matrícula ya está registrada'],
     },
     Especialidad: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Especialidad',
     },
     Telefono: {
@@ -47,7 +47,7 @@ const medicoSchema = new mongoose.Schema({
 });
 
 medicoSchema.set('toJSON', {
-    transform: (documento, medicoRetorno) => {
+    transform: (documento: any, medicoRetorno: any) => {
         medicoRetorno.id = medicoRetorno._id;
         delete medicoRetorno._id;
         delete medicoRetorno.__v;
@@ -55,4 +55,4 @@ medicoSchema.set('toJSON', {
     }
 });
 
-module.exports = mongoose.model('Medico', medicoSchema);
+module.exports = model('Medico', medicoSchema);
